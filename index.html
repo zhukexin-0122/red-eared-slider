@@ -1071,25 +1071,25 @@ body,#screen-start,#screen-game,#screen-end{font-family:'Love Ya Like A Sister',
 
 .photo-stack{
   --photo-card-w:clamp(46px,8.333vw,120px);
-  --photo-step:clamp(27.6px,5vw,72px);
+  --photo-card-h:clamp(62px,10.42vw,150px);
   position:fixed;left:6%;bottom:8%;z-index:88;width:min(320px,38vw);
-  height:clamp(62px,10.42vw,150px);overflow:visible;pointer-events:none;
+  height:var(--photo-card-h);overflow:visible;pointer-events:none;
 }
 .photo-stack:not([data-count]),.photo-stack[data-count="0"]{display:none}
 .photo-card{
-  position:absolute;left:0;bottom:0;display:block;width:var(--photo-card-w);aspect-ratio:4/5;box-sizing:border-box;
-  padding:5px 5px 18px;overflow:hidden;border:1px solid rgba(61,49,36,.28);
-  background:#f5f0e7;box-shadow:0 3px 8px rgba(18,13,9,.3);
+  position:absolute;left:0;bottom:0;display:block;width:var(--photo-card-w);box-sizing:border-box;
+  padding:0;overflow:visible;border:0;background:transparent;
+  filter:drop-shadow(0 3px 5px rgba(18,13,9,.2));
   transform:translateX(var(--photo-x,0px)) rotate(var(--photo-rotation,0deg));
-  transform-origin:50% 75%;transition:transform .3s cubic-bezier(.2,.75,.25,1),filter .25s ease,box-shadow .25s ease,outline-color .25s ease;
+  transform-origin:50% 75%;transition:transform .3s cubic-bezier(.2,.75,.25,1),filter .25s ease;
   pointer-events:auto;cursor:pointer;
 }
-.photo-card img{display:block;width:100%;height:100%;object-fit:cover;background:#e6ddcf}
-.photo-card.is-shifted{transform:translateX(calc(var(--photo-x,0px) + var(--photo-card-w))) rotate(var(--photo-rotation,0deg))}
-.photo-card.is-active{z-index:99!important;transform:translateX(var(--photo-x,0px)) rotate(0deg);filter:brightness(1.08) saturate(1.06);outline:2px solid #fffaf0;outline-offset:-1px;box-shadow:0 10px 24px rgba(18,13,9,.48)}
+.photo-card.is-landscape{width:calc(var(--photo-card-w) * 1.25)}
+.photo-card img{display:block;width:100%;height:auto;object-fit:contain}
+.photo-card.is-shifted{transform:translateX(calc(var(--photo-x,0px) + var(--photo-shift,0px))) rotate(var(--photo-rotation,0deg))}
+.photo-card.is-active{z-index:99!important;transform:translateX(var(--photo-x,0px)) rotate(0deg);filter:brightness(1.08) saturate(1.06) drop-shadow(0 0 2px #fffaf0) drop-shadow(0 10px 12px rgba(18,13,9,.48))}
 @media(max-width:640px){
-  .photo-stack{left:4%;bottom:6%;width:min(250px,58vw);height:clamp(58px,18vw,100px)}
-  .photo-card{padding:3px 3px 11px}
+  .photo-stack{--photo-card-h:clamp(58px,18vw,100px);left:4%;bottom:6%;width:min(250px,58vw)}
 }
 
 /* Twelve province field boards. The artwork stays untouched; only live level text and hit areas sit above it. */
@@ -3025,37 +3025,37 @@ function buyGene(id){
 
 /* ---------- 省份障碍弹窗 ---------- */
 const PROVINCE_BOARDS=Object.freeze({
-  nmg:{photos:['assets/photos/nmg/turtle.jpg','assets/photos/nmg/habitat.jpg'],src:'assets/board/nmg.png',genes:['temp','drought'],levels:[[218,597],[218,708]],buttons:[[513,551,240,89],[513,659,240,89]],papers:['#eee2d4','#ebdfcf']},
-  gd:{photos:['assets/photos/gd/turtle.jpg','assets/photos/gd/habitat.jpg'],src:'assets/board/gd.png',genes:['diet','growth'],levels:[[210,624],[210,732]],buttons:[[482,580,240,89],[482,688,240,89]],papers:['#ece2d4','#eadece']},
-  xz:{photos:['assets/photos/xz/turtle.jpg','assets/photos/xz/habitat.jpg'],src:'assets/board/xz.png',genes:['temp','drought'],levels:[[217,624],[217,732]],buttons:[[508,580,240,89],[508,688,240,89]],papers:['#eee2d3','#eadece']},
-  sx:{photos:['assets/photos/sx/turtle.jpg','assets/photos/sx/habitat.jpg'],src:'assets/board/sx.png',genes:['drought'],levels:[[221,628]],buttons:[[523,584,240,89]],papers:['#ece2d4']},
-  gx:{photos:['assets/photos/gx/turtle.jpg','assets/photos/gx/habitat.jpg'],src:'assets/board/gx.png',genes:['growth','diet'],levels:[[198,622],[198,730]],buttons:[[464,578,240,89],[464,686,240,89]],papers:['#ede2d3','#e9ddcd']},
-  hi:{photos:['assets/photos/hi/turtle.jpg','assets/photos/hi/habitat.jpg'],src:'assets/board/hi.png',genes:['vivid'],levels:[[219,619]],buttons:[[514,570,240,89]],papers:['#ede3d4']},
-  fj:{photos:['assets/photos/fj/turtle.jpg','assets/photos/fj/habitat.jpg'],src:'assets/board/fj.png',genes:['vivid'],levels:[[216,628]],buttons:[[482,579,240,89]],papers:['#ede2d3']},
-  hun:{photos:['assets/photos/hun/turtle.jpg','assets/photos/hun/habitat.jpg'],src:'assets/board/hun.png',genes:['diet','fecund'],levels:[[210,616],[210,726]],buttons:[[476,569,240,89],[476,677,240,89]],papers:['#eee2d2','#eadecf']},
-  jxi:{photos:['assets/photos/jxi/turtle.jpg','assets/photos/jxi/habitat.jpg'],src:'assets/board/jxi.png',genes:['starve','growth'],levels:[[198,610],[198,716]],buttons:[[483,561,240,89],[483,669,240,89]],papers:['#ede2d4','#ebdfcf']},
-  zhe:{photos:['assets/photos/zhe/turtle.jpg','assets/photos/zhe/habitat.jpg'],src:'assets/board/zhe.png',genes:['temp','starve'],levels:[[209,617],[209,730]],buttons:[[521,570,240,89],[521,678,240,89]],papers:['#ede2d4','#eadfce']},
-  jsu:{photos:['assets/photos/jsu/turtle.jpg','assets/photos/jsu/habitat.jpg'],src:'assets/board/jsu.png',genes:['drought','starve'],levels:[[214,617],[214,725]],buttons:[[526,568,240,89],[526,676,240,89]],papers:['#ede3d3','#eadfcf']},
-  ahu:{photos:['assets/photos/ahu/turtle.jpg','assets/photos/ahu/habitat.jpg'],src:'assets/board/ahu.png',genes:['starve','fecund'],levels:[[214,617],[214,725]],buttons:[[526,568,240,89],[526,676,240,89]],papers:['#ede3d4','#eadfcf']},
-  hub:{photos:['assets/photos/hub/turtle.jpg','assets/photos/hub/habitat.jpg'],src:'assets/board/hub.png',genes:['starve','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  henan:{photos:['assets/photos/henan/turtle.jpg','assets/photos/henan/habitat.jpg'],src:'assets/board/henan.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  scu:{photos:['assets/photos/scu/turtle.jpg','assets/photos/scu/habitat.jpg'],src:'assets/board/scu.png',genes:['diet','starve'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  sha:{photos:['assets/photos/sha/turtle.jpg','assets/photos/sha/habitat.jpg'],src:'assets/board/sha.png',genes:['hide','vivid'],levels:[[210,597],[210,705]],buttons:[null,[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  cq:{photos:['assets/photos/cq/turtle.jpg','assets/photos/cq/habitat.jpg'],src:'assets/board/cq.png',genes:['starve'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#ede3d4']},
-  yun:{photos:['assets/photos/yun/turtle.jpg','assets/photos/yun/habitat.jpg'],src:'assets/board/yun.png',genes:['diet','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  guz:{photos:['assets/photos/guz/turtle.jpg','assets/photos/guz/habitat.jpg'],src:'assets/board/guz.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  shd:{photos:['assets/photos/shd/turtle.jpg','assets/photos/shd/habitat.jpg'],src:'assets/board/shd.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  shx:{photos:['assets/photos/shx/turtle.jpg','assets/photos/shx/habitat.jpg'],src:'assets/board/shx.png',genes:['starve','temp'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  tj:{photos:['assets/photos/tj/turtle.jpg','assets/photos/tj/habitat.jpg'],src:'assets/board/tj.png',genes:['hide'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  bei:{photos:['assets/photos/bei/turtle.jpg','assets/photos/bei/habitat.jpg'],src:'assets/board/bei.png',genes:['hide','vivid'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  heb:{photos:['assets/photos/heb/turtle.jpg','assets/photos/heb/habitat.jpg'],src:'assets/board/heb.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  lia:{photos:['assets/photos/lia/turtle.jpg','assets/photos/lia/habitat.jpg'],src:'assets/board/lia.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  jl:{photos:['assets/photos/jl/turtle.jpg','assets/photos/jl/habitat.jpg'],src:'assets/board/jl.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  hei:{photos:['assets/photos/hei/turtle.jpg','assets/photos/hei/habitat.jpg'],src:'assets/board/hei.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  nx:{photos:['assets/photos/nx/turtle.jpg','assets/photos/nx/habitat.jpg'],src:'assets/board/nx.png',genes:['drought'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
-  gs:{photos:['assets/photos/gs/turtle.jpg','assets/photos/gs/habitat.jpg'],src:'assets/board/gs.png',genes:['drought','starve'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  qh:{photos:['assets/photos/qh/turtle.jpg','assets/photos/qh/habitat.jpg'],src:'assets/board/qh.png',genes:['temp','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
-  xj:{photos:['assets/photos/xj/turtle.jpg','assets/photos/xj/habitat.jpg'],src:'assets/board/xj.png',genes:['drought','temp'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  nmg:{photos:['assets/photos/nmg/image 39.png','assets/photos/nmg/image 37.png','assets/photos/nmg/image 40.png'],src:'assets/board/nmg.png',genes:['temp','drought'],levels:[[218,597],[218,708]],buttons:[[513,551,240,89],[513,659,240,89]],papers:['#eee2d4','#ebdfcf']},
+  gd:{photos:['assets/photos/gd/image 43.png','assets/photos/gd/image 42.png'],src:'assets/board/gd.png',genes:['diet','growth'],levels:[[210,624],[210,732]],buttons:[[482,580,240,89],[482,688,240,89]],papers:['#ece2d4','#eadece']},
+  xz:{photos:['assets/photos/xz/image 45.png','assets/photos/xz/image 44.png'],src:'assets/board/xz.png',genes:['temp','drought'],levels:[[217,624],[217,732]],buttons:[[508,580,240,89],[508,688,240,89]],papers:['#eee2d3','#eadece']},
+  sx:{photos:['assets/photos/sx/image 46.png','assets/photos/sx/image 47.png','assets/photos/sx/image 48.png'],src:'assets/board/sx.png',genes:['drought'],levels:[[221,628]],buttons:[[523,584,240,89]],papers:['#ece2d4']},
+  gx:{photos:['assets/photos/gx/image 49.png','assets/photos/gx/image 50.png','assets/photos/gx/image 51.png'],src:'assets/board/gx.png',genes:['growth','diet'],levels:[[198,622],[198,730]],buttons:[[464,578,240,89],[464,686,240,89]],papers:['#ede2d3','#e9ddcd']},
+  hi:{photos:['assets/photos/hi/image 52.png','assets/photos/hi/image 53.png'],src:'assets/board/hi.png',genes:['vivid'],levels:[[219,619]],buttons:[[514,570,240,89]],papers:['#ede3d4']},
+  fj:{photos:['assets/photos/fj/image 54.png','assets/photos/fj/image 55.png','assets/photos/fj/image 56.png'],src:'assets/board/fj.png',genes:['vivid'],levels:[[216,628]],buttons:[[482,579,240,89]],papers:['#ede2d3']},
+  hun:{photos:['assets/photos/hun/image 57.png','assets/photos/hun/image 58.png','assets/photos/hun/image 59.png'],src:'assets/board/hun.png',genes:['diet','fecund'],levels:[[210,616],[210,726]],buttons:[[476,569,240,89],[476,677,240,89]],papers:['#eee2d2','#eadecf']},
+  jxi:{photos:['assets/photos/jxi/image 60.png','assets/photos/jxi/image 63.png','assets/photos/jxi/image 64.png'],src:'assets/board/jxi.png',genes:['starve','growth'],levels:[[198,610],[198,716]],buttons:[[483,561,240,89],[483,669,240,89]],papers:['#ede2d4','#ebdfcf']},
+  zhe:{photos:['assets/photos/zhe/image 65.png','assets/photos/zhe/image 66.png'],src:'assets/board/zhe.png',genes:['temp','starve'],levels:[[209,617],[209,730]],buttons:[[521,570,240,89],[521,678,240,89]],papers:['#ede2d4','#eadfce']},
+  jsu:{photos:['assets/photos/jsu/image 61.png','assets/photos/jsu/image 62.png'],src:'assets/board/jsu.png',genes:['drought','starve'],levels:[[214,617],[214,725]],buttons:[[526,568,240,89],[526,676,240,89]],papers:['#ede3d3','#eadfcf']},
+  ahu:{photos:['assets/photos/ahu/image 67.png','assets/photos/ahu/image 68.png','assets/photos/ahu/image 70-1.png'],src:'assets/board/ahu.png',genes:['starve','fecund'],levels:[[214,617],[214,725]],buttons:[[526,568,240,89],[526,676,240,89]],papers:['#ede3d4','#eadfcf']},
+  hub:{photos:['assets/photos/hub/image 71.png','assets/photos/hub/image 72.png','assets/photos/hub/image 73.png'],src:'assets/board/hub.png',genes:['starve','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  henan:{photos:['assets/photos/henan/image 73-4.png','assets/photos/henan/image 74.png'],src:'assets/board/henan.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  scu:{photos:['assets/photos/scu/image 70.png','assets/photos/scu/image 75-2.png'],src:'assets/board/scu.png',genes:['diet','starve'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  sha:{photos:['assets/photos/sha/image 77-1.png','assets/photos/sha/image 74-1.png'],src:'assets/board/sha.png',genes:['hide','vivid'],levels:[[210,597],[210,705]],buttons:[null,[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  cq:{photos:['assets/photos/cq/image 73-3.png','assets/photos/cq/image 77.png','assets/photos/cq/image 78.png'],src:'assets/board/cq.png',genes:['starve'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#ede3d4']},
+  yun:{photos:['assets/photos/yun/image 73-1.png','assets/photos/yun/image 75.png','assets/photos/yun/image 79.png'],src:'assets/board/yun.png',genes:['diet','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  guz:{photos:['assets/photos/guz/image 80.png','assets/photos/guz/image 75-1.png'],src:'assets/board/guz.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  shd:{photos:['assets/photos/shd/image 82.png','assets/photos/shd/image 83.png'],src:'assets/board/shd.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  shx:{photos:['assets/photos/shx/image 73-2.png','assets/photos/shx/image 84.png','assets/photos/shx/image 85.png'],src:'assets/board/shx.png',genes:['starve','temp'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  tj:{photos:['assets/photos/tj/image 86.png','assets/photos/tj/image 85-2.png','assets/photos/tj/image 87.png'],src:'assets/board/tj.png',genes:['hide'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  bei:{photos:['assets/photos/bei/image 88.png','assets/photos/bei/image 85-3.png','assets/photos/bei/image 89.png'],src:'assets/board/bei.png',genes:['hide','vivid'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  heb:{photos:['assets/photos/heb/image 90.png','assets/photos/heb/image 91.png'],src:'assets/board/heb.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  lia:{photos:['assets/photos/lia/image 85-1.png','assets/photos/lia/image 93-2.png','assets/photos/lia/image 92.png'],src:'assets/board/lia.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  jl:{photos:['assets/photos/jl/image 93-3.png','assets/photos/jl/image 94.png','assets/photos/jl/image 95.png'],src:'assets/board/jl.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  hei:{photos:['assets/photos/hei/image 97-1.png','assets/photos/hei/image 93-4.png','assets/photos/hei/image 96.png'],src:'assets/board/hei.png',genes:['temp'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  nx:{photos:['assets/photos/nx/image 101.png','assets/photos/nx/image 93-5.png','assets/photos/nx/image 104.png'],src:'assets/board/nx.png',genes:['drought'],levels:[[210,597]],buttons:[[483,560,240,89]],papers:['#eee3d5']},
+  gs:{photos:['assets/photos/gs/image 105.png','assets/photos/gs/image 97.png','assets/photos/gs/image 102.png'],src:'assets/board/gs.png',genes:['drought','starve'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  qh:{photos:['assets/photos/qh/image 103.png','assets/photos/qh/image 93.png','assets/photos/qh/image 108.png'],src:'assets/board/qh.png',genes:['temp','drought'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
+  xj:{photos:['assets/photos/xj/image 106.png','assets/photos/xj/image 107.png','assets/photos/xj/image 93-1.png'],src:'assets/board/xj.png',genes:['drought','temp'],levels:[[210,597],[210,705]],buttons:[[483,560,240,89],[483,669,240,89]],papers:['#eee3d5','#ede2d2']},
 });
 function boardPercent(value,total){ return (value/total*100).toFixed(4)+'%'; }
 function renderObstacleRelease(id,auto){
@@ -3085,8 +3085,21 @@ function clearObstaclePhotoStack(){
 function syncPhotoStackOffsets(host){
   const cards=[...host.querySelectorAll('.photo-card')];
   if(!cards.length) return;
-  const width=parseFloat(getComputedStyle(cards[0]).width)||120;
-  cards.forEach((card,index)=>card.style.setProperty('--photo-x',(index*width*.6)+'px'));
+  const maxHeight=host.getBoundingClientRect().height;
+  let offset=0;
+  cards.forEach(card=>{
+    card.style.removeProperty('width');
+    const style=getComputedStyle(card);
+    const maxWidth=parseFloat(style.width)||120;
+    const paddingX=parseFloat(style.paddingLeft)+parseFloat(style.paddingRight)+parseFloat(style.borderLeftWidth)+parseFloat(style.borderRightWidth);
+    const paddingY=parseFloat(style.paddingTop)+parseFloat(style.paddingBottom)+parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth);
+    const image=card.querySelector('img');
+    const ratio=image?.naturalWidth/image?.naturalHeight||.8;
+    const width=Math.min(maxWidth,(maxHeight-paddingY)*ratio+paddingX);
+    card.style.width=width+'px';
+    card.style.setProperty('--photo-x',offset+'px');
+    offset+=width*.6;
+  });
 }
 function renderObstaclePhotoStack(id){
   clearObstaclePhotoStack();
@@ -3096,14 +3109,29 @@ function renderObstaclePhotoStack(id){
   host.dataset.count=String(Math.min(3,photos.length));
   host.setAttribute('aria-hidden','true');
   host.innerHTML=photos.slice(0,3).map((src,index)=>`<button type="button" class="photo-card" style="--i:${index};--photo-rotation:${[-4,2,-2][index]}deg" aria-label="Province photo ${index+1}" tabindex="-1"><img src="${src}" alt="" loading="lazy"></button>`).join('');
-  host.querySelectorAll('.photo-card img').forEach(image=>image.addEventListener('error',()=>{
-    image.closest('.photo-card')?.remove();
-    const cards=[...host.querySelectorAll('.photo-card')];
-    cards.forEach((card,index)=>card.style.setProperty('--i',index));
-    const remaining=cards.length;
-    if(!remaining) clearObstaclePhotoStack();
-    else{host.dataset.count=String(remaining);syncPhotoStackOffsets(host);}
-  },{once:true}));
+  host.querySelectorAll('.photo-card img').forEach(image=>{
+    const onLoad=()=>{
+      const card=image.closest('.photo-card');
+      if(!card) return;
+      card.classList.toggle('is-landscape',image.naturalWidth>=image.naturalHeight);
+      card.classList.toggle('is-portrait',image.naturalWidth<image.naturalHeight);
+      syncPhotoStackOffsets(host);
+    };
+    const onError=()=>{
+      image.closest('.photo-card')?.remove();
+      const cards=[...host.querySelectorAll('.photo-card')];
+      cards.forEach((card,index)=>{
+        card.style.setProperty('--i',index);
+        card.style.zIndex=index+1;
+        card.classList.remove('is-active','is-shifted');
+      });
+      if(!cards.length) clearObstaclePhotoStack();
+      else{host.dataset.count=String(cards.length);syncPhotoStackOffsets(host);}
+    };
+    image.addEventListener('load',onLoad,{once:true});
+    image.addEventListener('error',onError,{once:true});
+    if(image.complete) image.naturalWidth?onLoad():onError();
+  });
   syncPhotoStackOffsets(host);
   if(typeof ResizeObserver!=='undefined'){
     photoStackResizeObserver=new ResizeObserver(()=>syncPhotoStackOffsets(host));
@@ -3119,6 +3147,7 @@ obstaclePhotoStack.addEventListener('pointerover',event=>{
     const index=Number(card.style.getPropertyValue('--i'));
     card.classList.toggle('is-active',card===active);
     card.classList.toggle('is-shifted',index>activeIndex);
+    if(index>activeIndex) card.style.setProperty('--photo-shift',active.offsetWidth+'px');
   });
 });
 obstaclePhotoStack.addEventListener('mouseleave',()=>{
@@ -3269,6 +3298,8 @@ function enterTerrainMode(id){
   $('terrainGlass').classList.add('show');
   $('terrain3d').classList.add('show');$('terrain3d').setAttribute('aria-hidden','false');
   $('dossierInfo').classList.add('show');$('dossierInfo').setAttribute('aria-hidden','false');
+  attachObstaclePhotoStack();
+  renderObstaclePhotoStack(id);
   const targetLeft=Math.max(14,innerWidth*.03),targetTop=Math.max(64,innerHeight*.09);
   const targetWidth=Math.min(rect.width,innerWidth*(innerWidth<580?.55:.34));
   requestAnimationFrame(()=>{
@@ -3283,6 +3314,8 @@ function enterTerrainMode(id){
 function leaveTerrainMode(){
   if(!terrainActive) return;
   terrainActive=false;
+  clearObstaclePhotoStack();
+  restoreObstaclePhotoStack();
   window.pendingTerrainKind=null;
   window.terrainViewer?.hide();
   $('terrainGlass').classList.remove('show');
@@ -3353,9 +3386,7 @@ function openObstacleModal(id,auto=false){
   $('obstacleCard').classList.toggle('inner-mongolia',innerMongoliaBoard);
   $('obstacleCard').classList.toggle('board-popup',boardMode);
   $('obstacleCard').classList.toggle('board-auto',boardAuto);
-  attachObstaclePhotoStack();
   renderProvinceBoard(boardMode?id:null);
-  renderObstaclePhotoStack(id);
   $('obstacleTitle').textContent=`${MAP_EN_NAMES[id]||p.name} · Dossier`;
   $('obstacleDesc').textContent='Province threshold and invasion status';
   const facts=$('innerMongoliaFacts');
