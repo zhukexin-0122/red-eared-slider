@@ -1087,7 +1087,7 @@ body,#screen-start,#screen-game,#screen-end{font-family:'Love Ya Like A Sister',
 .photo-card.is-landscape{width:calc(var(--photo-card-w) * 1.25)}
 .photo-card img{display:block;width:100%;height:auto;object-fit:contain}
 .photo-card.is-shifted{transform:translateX(calc(var(--photo-x,0px) + var(--photo-shift,0px))) rotate(var(--photo-rotation,0deg))}
-.photo-card.is-active{z-index:99!important;transform:translateX(var(--photo-x,0px)) rotate(0deg);filter:brightness(1.08) saturate(1.06) drop-shadow(0 0 2px #fffaf0) drop-shadow(0 10px 12px rgba(18,13,9,.48))}
+.photo-card.is-active{z-index:99!important;transform:translateX(var(--photo-x,0px)) rotate(0deg) scale(1.5);filter:brightness(1.08) saturate(1.06) drop-shadow(0 0 2px #fffaf0) drop-shadow(0 10px 12px rgba(18,13,9,.48))}
 @media(max-width:640px){
   .photo-stack{--photo-card-h:clamp(58px,18vw,100px);left:4%;bottom:6%;width:min(250px,58vw)}
 }
